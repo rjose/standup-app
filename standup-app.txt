@@ -68,7 +68,7 @@ I get the names to show, let's reorganize this code. OK, got the names to show.
 Let's check in and then reorganize this code.
 
 Let's start by moving exposed code to functions. Done. I got the tracks to
-render again. Let's check in and then render a staff view.
+render again. Let's check in and then render a staff view. Done!
 
 risk Items
 ~~~~~~~~~~

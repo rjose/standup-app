@@ -30,7 +30,10 @@ trackStaff["Contacts"] = {
 -- Global Data
 --
 local global = {}
+-- TODO: Rename widgetGroup
 global.widgetGroup = nil
+global.staffView = nil
+
 global.currentTrack = ""
 
 
@@ -65,12 +68,6 @@ end
 
 
 
--- Forward reference for our back button & tableview
-local backButton, list
-local staffView
-
-
-
 -- Handle row rendering
 local function onRowRender( event )
 	local row = event.row
@@ -88,48 +85,46 @@ local function onRowRender( event )
 end
 
 
---local function onStaffRowRender(event)
---	local row = event.row
---
---        local personName = trackStaff[global.currentTrack][row.index]
---
---	local rowTitle = display.newText( row, personName, 0, 0, native.systemFontBold, 16 )
---	rowTitle.x = row.x - ( row.contentWidth * 0.5 ) + ( rowTitle.contentWidth * 0.5 ) + LEFT_PADDING
---	rowTitle.y = row.contentHeight * 0.5
---	rowTitle:setTextColor( 0, 0, 0 )
---
---	local rowArrow = display.newImage( row, "rowArrow.png", false )
---	rowArrow.x = row.x + ( row.contentWidth * 0.5 ) - rowArrow.contentWidth
---	rowArrow.y = row.contentHeight * 0.5
---end
---
---local function onStaffRowTouch(event)
---        print("onStaffRowTouch")
---end
+local function onStaffRowRender(event)
+	local row = event.row
 
---local function getStaffView(track)
---        local result = widget.newTableView
---        {
---        	top = 38,
---        	width = 320,
---        	height = 448,
---        	maskFile = "mask-320x448.png",
---        	onRowRender = onStaffRowRender,
---        	onRowTouch = onStaffRowTouch,
---        }
---
---
---        global.widgetGroup:insert( result )
---
---        if trackStaff[track] then
---                for i = 1, #trackStaff[track] do
---                	result:insertRow{
---                		height = 72,
---                	}
---                end
---        end
---        return result
---end
+        local personName = trackStaff[global.currentTrack][row.index]
+
+        -- TODO: Extract and make generic
+	local rowTitle = display.newText( row, personName, 0, 0, native.systemFontBold, 16 )
+	rowTitle.x = row.x - ( row.contentWidth * 0.5 ) + ( rowTitle.contentWidth * 0.5 ) + LEFT_PADDING
+	rowTitle.y = row.contentHeight * 0.5
+	rowTitle:setTextColor( 0, 0, 0 )
+
+	local rowArrow = display.newImage( row, "rowArrow.png", false )
+	rowArrow.x = row.x + ( row.contentWidth * 0.5 ) - rowArrow.contentWidth
+	rowArrow.y = row.contentHeight * 0.5
+end
+
+local function onStaffRowTouch(event)
+        print("onStaffRowTouch")
+end
+
+local function getStaffView(track)
+        local result = display.newGroup()
+        local list = makeList(onStaffRowRender, onStaffRowTouch)
+        local titleBar = makeTitleBar()
+        local titleText = makeTitle(titleBar, track .. " Staff")
+        local shadow = makeTitleShadow(titleBar)
+
+        -- TODO: Extract this and make it common
+        result:insert( list )
+        result:insert( titleBar )
+        result:insert( titleText )
+        result:insert( shadow )
+
+        if trackStaff[track] then
+                for i = 1, #trackStaff[track] do
+                        list:insertRow{ height = 72 }
+                end
+        end
+        return result
+end
 
 -- Hande row touch events
 local function onRowTouch( event )
@@ -142,20 +137,12 @@ local function onRowTouch( event )
 		print( "Pressed row: " .. row.index )
 
 	elseif "release" == phase then
-                --Text to show which item we selected
-                --staffView = getStaffView(track)
+                global.staffView = getStaffView(track)
 
-                -- Construct an assignment view and transition to it
-
-		---- Update the item selected text
-		--staffView.text = "You selected item " .. row.index
-		--
-		----Transition out the list, transition in the item selected text and the back button
-		transition.to( global.widgetGroup, { x = - list.contentWidth, time = 400, transition = easing.outExpo } )
-		--transition.to( staffView, { x = 0, time = 400, transition = easing.outExpo } )
-		--transition.to( backButton, { alpha = 1, time = 400, transition = easing.outQuad } )
-		--
-		--print( "Tapped and/or Released row: " .. row.index )
+		--Transition out the list, transition in the item selected text and the back button
+		transition.to( global.widgetGroup, { x = - global.widgetGroup.contentWidth,
+                               time = 400, transition = easing.outExpo } )
+		transition.to( global.staffView, { x = 0, time = 400, transition = easing.outExpo } )
 	end
 end
 
