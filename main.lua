@@ -30,8 +30,7 @@ trackStaff["Contacts"] = {
 -- Global Data
 --
 local global = {}
--- TODO: Rename widgetGroup
-global.widgetGroup = nil
+global.tracksView = nil
 global.staffView = nil
 
 global.currentTrack = ""
@@ -69,7 +68,7 @@ end
 
 
 -- Handle row rendering
-local function onRowRender( event )
+local function onTrackRowRender( event )
 	local row = event.row
 
         local trackName = tracks[row.index]
@@ -106,17 +105,8 @@ local function onStaffRowTouch(event)
 end
 
 local function getStaffView(track)
-        local result = display.newGroup()
-        local list = makeList(onStaffRowRender, onStaffRowTouch)
-        local titleBar = makeTitleBar()
-        local titleText = makeTitle(titleBar, track .. " Staff")
-        local shadow = makeTitleShadow(titleBar)
-
-        -- TODO: Extract this and make it common
-        result:insert( list )
-        result:insert( titleBar )
-        result:insert( titleText )
-        result:insert( shadow )
+        local result = makeListView("Mobile Tracks", onTrackRowRender, onTrackRowTouch);
+        local list = result[1]
 
         if trackStaff[track] then
                 for i = 1, #trackStaff[track] do
@@ -127,7 +117,7 @@ local function getStaffView(track)
 end
 
 -- Hande row touch events
-local function onRowTouch( event )
+local function onTrackRowTouch( event )
 	local phase = event.phase
 	local row = event.target
         local track = tracks[row.index]
@@ -140,7 +130,7 @@ local function onRowTouch( event )
                 global.staffView = getStaffView(track)
 
 		--Transition out the list, transition in the item selected text and the back button
-		transition.to( global.widgetGroup, { x = - global.widgetGroup.contentWidth,
+		transition.to( global.tracksView, { x = - global.tracksView.contentWidth,
                                time = 400, transition = easing.outExpo } )
 		transition.to( global.staffView, { x = 0, time = 400, transition = easing.outExpo } )
 	end
@@ -159,23 +149,27 @@ function makeList(onRowRender, onRowTouch)
         return result
 end
 
-function getTrackView(tracks)
+function makeListView(title, onRowRender, onRowTouch)
         local result = display.newGroup()
         local list = makeList(onRowRender, onRowTouch)
         local titleBar = makeTitleBar()
-        local titleText = makeTitle(titleBar, "Mobile Tracks!")
+        local titleText = makeTitle(titleBar, title)
         local shadow = makeTitleShadow(titleBar)
 
         result:insert( list )
         result:insert( titleBar )
         result:insert( titleText )
         result:insert( shadow )
+        return result
+end
 
-        -- insert rows into list (tableView widget)
+function getTrackView(tracks)
+        local result = makeListView("Mobile Tracks", onTrackRowRender, onTrackRowTouch);
+        local list = result[1]
+
+        -- Add tracks
         for i = 1, #tracks do
-        	list:insertRow{
-        		height = 72,
-        	}
+                list:insertRow{ height = 72 }
         end
 
         return result
@@ -192,7 +186,7 @@ end
 --	transition.to( backButton, { alpha = 0, time = 400, transition = easing.outQuad } )
 --
 --        -- Remove staff view
---        --widgetGroup:remove(staffView)
+--        --tracksView:remove(staffView)
 --        staffView = nil
 --end
 --
@@ -208,11 +202,11 @@ end
 --backButton.alpha = 0
 --backButton.x = display.contentCenterX
 --backButton.y = display.contentHeight - backButton.contentHeight
---global.widgetGroup:insert( backButton )
+--global.tracksView:insert( backButton )
 
 local function init()
         display.setDefault( "background", 255, 255, 255 )
-        global.widgetGroup = getTrackView(tracks)
+        global.tracksView = getTrackView(tracks)
 end
 
 init()

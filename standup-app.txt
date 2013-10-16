@@ -34,7 +34,7 @@ JSON, but if there's code to parse it, then we might as well.
 Implementation
 ~~~~~~~~~~~~~~
 . Sketch out screens for app [X]
-. Build app under simulator [X][X][][][][][]
+. Build app under simulator [X][X][X][X][][][]
 . Mock up data on the server side [][][][]
 . Push mocked data backwards [][][][][]
 . Pull JIRA data [][][][][][]
@@ -69,6 +69,9 @@ Let's check in and then reorganize this code.
 
 Let's start by moving exposed code to functions. Done. I got the tracks to
 render again. Let's check in and then render a staff view. Done!
+
+TODO: Add a back button to the title bar
+TODO: Clean up more code
 
 risk Items
 ~~~~~~~~~~
