@@ -39,6 +39,7 @@ Implementation
 . Push mocked data backwards [][][][][]
 . Pull JIRA data [][][][][][]
 . Condition data [][][][][][]
+. Update JIRA data [][][][]
 . Deploy onto app [][][][]
 . Clean up the code [][][]
 
@@ -65,6 +66,9 @@ build another list view. This should be easy...Got the page to come in, but the
 back button is missing. Let's do "back" in a different way. Actually, as soon as
 I get the names to show, let's reorganize this code. OK, got the names to show.
 Let's check in and then reorganize this code.
+
+Let's start by moving exposed code to functions. Done. I got the tracks to
+render again. Let's check in and then render a staff view.
 
 risk Items
 ~~~~~~~~~~
