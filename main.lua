@@ -54,6 +54,8 @@ trackStaff["Contacts"] = {
         "Person 2"
 }
 
+-- TODO: Package all glocal items into one object
+local currentTrack = ""
 
 -- Handle row rendering
 local function onRowRender( event )
@@ -73,13 +75,46 @@ end
 
 local staffView
 
+local function onStaffRowRender(event)
+	local row = event.row
+
+        local personName = trackStaff[currentTrack][row.index]
+	
+	local rowTitle = display.newText( row, personName, 0, 0, native.systemFontBold, 16 )
+	rowTitle.x = row.x - ( row.contentWidth * 0.5 ) + ( rowTitle.contentWidth * 0.5 ) + LEFT_PADDING
+	rowTitle.y = row.contentHeight * 0.5
+	rowTitle:setTextColor( 0, 0, 0 )
+	
+	local rowArrow = display.newImage( row, "rowArrow.png", false )
+	rowArrow.x = row.x + ( row.contentWidth * 0.5 ) - rowArrow.contentWidth
+	rowArrow.y = row.contentHeight * 0.5
+end
+
+local function onStaffRowTouch(event)
+        print("onStaffRowTouch")
+end
+
 local function getStaffView(track)
-        local result
-        result = display.newText( "TODO: Add staff view: " .. track, 0, 0, native.systemFontBold, 18 )
-        result:setTextColor( 0 )
-        result.x = display.contentWidth + result.contentWidth * 0.5
-        result.y = display.contentCenterY
+        local result = widget.newTableView
+        {
+        	top = 38,
+        	width = 320, 
+        	height = 448,
+        	maskFile = "mask-320x448.png",
+        	onRowRender = onStaffRowRender,
+        	onRowTouch = onStaffRowTouch,
+        }
+
+
         widgetGroup:insert( result )
+
+        if trackStaff[track] then
+                for i = 1, #trackStaff[track] do
+                	result:insertRow{
+                		height = 72,
+                	}
+                end
+        end
         return result
 end
 
@@ -88,6 +123,7 @@ local function onRowTouch( event )
 	local phase = event.phase
 	local row = event.target
         local track = tracks[row.index]
+        currentTrack = track
 	
 	if "press" == phase then
 		print( "Pressed row: " .. row.index )
@@ -96,9 +132,6 @@ local function onRowTouch( event )
                 --Text to show which item we selected
                 staffView = getStaffView(track)
 
-                -- TODO: Remove staffView when done
-                -- TODO: Rename item selected to staff list
-
                 -- Construct an assignment view and transition to it
 
 		---- Update the item selected text
@@ -106,7 +139,7 @@ local function onRowTouch( event )
 		--
 		----Transition out the list, transition in the item selected text and the back button
 		transition.to( list, { x = - list.contentWidth, time = 400, transition = easing.outExpo } )
-		transition.to( staffView, { x = display.contentCenterX, time = 400, transition = easing.outExpo } )
+		transition.to( staffView, { x = 0, time = 400, transition = easing.outExpo } )
 		transition.to( backButton, { alpha = 1, time = 400, transition = easing.outQuad } )
 		--
 		--print( "Tapped and/or Released row: " .. row.index )
@@ -137,6 +170,9 @@ local function onBackRelease()
 	transition.to( list, { x = 0, time = 400, transition = easing.outExpo } )
 	transition.to( staffView, { x = display.contentWidth + staffView.contentWidth * 0.5, time = 400, transition = easing.outExpo } )
 	transition.to( backButton, { alpha = 0, time = 400, transition = easing.outQuad } )
+
+        -- Remove staff view
+        --widgetGroup:remove(staffView)
         staffView = nil
 end
 

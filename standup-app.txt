@@ -34,12 +34,13 @@ JSON, but if there's code to parse it, then we might as well.
 Implementation
 ~~~~~~~~~~~~~~
 . Sketch out screens for app [X]
-. Build app under simulator [X][X][][][]
+. Build app under simulator [X][X][][][][][]
 . Mock up data on the server side [][][][]
 . Push mocked data backwards [][][][][]
 . Pull JIRA data [][][][][][]
 . Condition data [][][][][][]
 . Deploy onto app [][][][]
+. Clean up the code [][][]
 
 
 1 - Sketch out screens for app
@@ -59,9 +60,13 @@ OK, let's find a list item sample and start putting some stuff into it. OK, I'm
 just poking around with this and not understanding it. Let's copy all of the
 files over and let me revise them from there. OK, it's rendering. Let's change
 some things. Alright, I have some data mocked into it. I'm about to try to show
-the second level view. Let's check in before this.
+the second level view. Let's check in before this. Alright, the next step is to
+build another list view. This should be easy...Got the page to come in, but the
+back button is missing. Let's do "back" in a different way. Actually, as soon as
+I get the names to show, let's reorganize this code. OK, got the names to show.
+Let's check in and then reorganize this code.
 
-Risk Items
+risk Items
 ~~~~~~~~~~
 - How to update JIRA
 
