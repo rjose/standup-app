@@ -1,0 +1,66 @@
+Standup App
+===========
+Rino Jose <@rjose>
+
+Freewriting on the Standup App
+------------------------------
+Alright, so what do we want here? I want to see a list of the tracks that we're
+currently running (I assume this is by team?). How do I handle logging in? I
+need to do this at some point. Maybe for now, I just let you specify an email
+address. But then I need someplace to store it. Maybe a cookie? Do we need to
+encrypt this? I dunno. At any rate, that's something.
+
+Given a set of tracks, I want to tap on one to see the current people working on
+items in that track. We should sort them by who's here, who's working on tasks,
+etc. On each person's detail page should be a list of the things they've been
+assigned. Whoever's leading should be able to update effort left from the cell.
+Maybe we have a tap control. Maybe we have something that can be dragged. Maybe
+it's just buttons.
+
+You should be able to go back to the list. We may need to work on how this
+works. For now a back button should be fine.
+
+OK, what are the risk items? I don't know how to handle updates. Should we
+update JIRA directly? Should we put this into another spreadsheet? I most
+certainly don't want to add this to the repo thereby making it another source of
+truth. It needs to be JIRA or a spreadsheet. Ideally, it's JIRA. Let's see if we
+can do this. If the update fails, what do we do? Who queues it up? Is it a fire
+and forget? I don't want it to be queued up and then overwrite info from later.
+
+Alright, let's sketch some screens out and see if I can get something running.
+We'll want the server to provide the API for the calls. It doesn't have to be
+JSON, but if there's code to parse it, then we might as well.
+
+Implementation
+~~~~~~~~~~~~~~
+. Sketch out screens for app [X]
+. Build app under simulator [][][][][]
+. Mock up data on the server side [][][][]
+. Push mocked data backwards [][][][][]
+. Pull JIRA data [][][][][][]
+. Condition data [][][][][][]
+. Deploy onto app [][][][]
+
+
+1 - Sketch out screens for app
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+OK, I have three screens: a track list, a team list, and a task list. Let me see
+how quickly I can get something set up in Corona. I'll see if there's a sample
+project I can start with. I'll take some notes in the next section.
+
+
+2 - Build app under simulator
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Alright, let's start by finding a good starting point. Let's create a repo for
+this and then move this spec over there. Done! Let's check in our sample code
+and then keep going.
+
+Risk Items
+~~~~~~~~~~
+- How to update JIRA
+
+Nice to haves
+~~~~~~~~~~~~~
+It would be nice to have a way to display to people what the PM is doing. Maybe
+the track list is shown and then as things are selected and updated, the view
+changes. This will be for later.
