@@ -1,0 +1,1 @@
+Demonstrates how to create a list view using the widget's Table View Library - a list view is a collection of content organized in rows that th euser can scroll up or down on touch. Tapping on each row can execute a custom function such as opening another slide. Notice how the list slides back into view when the user scrolls too far up or down.

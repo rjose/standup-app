@@ -34,7 +34,7 @@ JSON, but if there's code to parse it, then we might as well.
 Implementation
 ~~~~~~~~~~~~~~
 . Sketch out screens for app [X]
-. Build app under simulator [][][][][]
+. Build app under simulator [X][X][][][]
 . Mock up data on the server side [][][][]
 . Push mocked data backwards [][][][][]
 . Pull JIRA data [][][][][][]
@@ -53,7 +53,13 @@ project I can start with. I'll take some notes in the next section.
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 Alright, let's start by finding a good starting point. Let's create a repo for
 this and then move this spec over there. Done! Let's check in our sample code
-and then keep going.
+and then keep going. Done!
+
+OK, let's find a list item sample and start putting some stuff into it. OK, I'm
+just poking around with this and not understanding it. Let's copy all of the
+files over and let me revise them from there. OK, it's rendering. Let's change
+some things. Alright, I have some data mocked into it. I'm about to try to show
+the second level view. Let's check in before this.
 
 Risk Items
 ~~~~~~~~~~
