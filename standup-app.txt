@@ -34,7 +34,7 @@ JSON, but if there's code to parse it, then we might as well.
 Implementation
 ~~~~~~~~~~~~~~
 . Sketch out screens for app [X]
-. Build app under simulator [X][X][X][X][X][][]
+. Build app under simulator [X][X][X][X][X][X][]
 . Mock up data on the server side [][][][]
 . Push mocked data backwards [][][][][]
 . Pull JIRA data [][][][][][]
@@ -71,12 +71,27 @@ Let's start by moving exposed code to functions. Done. I got the tracks to
 render again. Let's check in and then render a staff view. Done!
 
 OK, let's do a little more code cleanup before we start. Done. Let's check in
-and then move the tracks code and staff code to their own files.
+and then move the tracks code and staff code to their own files. What I'm
+thinking is to have each file have a "data" object that we can update whenever
+the data changes. It's probably best to have this done via a function call than
+to set it directly. Hmmm...I think I need to sketch out the app flow to make
+sure this works the way it should.
+
+Now, that I'm looking at this, it seems that the handlers should be defined in
+main.lua since they will be app specific. Should both the render and the touch
+functions be in main? Let's just pull the touch handlers over first since these
+will change the main view. Done. Let's check in and then clean up main one more
+time.
 
 TODO: Add a back button to the title bar
 TODO: Clean up more code
+TODO: Figure out if objects are cleaned up when they go away
+TODO: Separate construction of view from its render
+TODO: Handle the global data in tracks_view.lua
+TODO: Let's make the views into a stack. The transition animation should be
+      separate
 
-risk Items
+Risk Items
 ~~~~~~~~~~
 - How to update JIRA
 

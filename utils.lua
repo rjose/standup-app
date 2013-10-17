@@ -21,6 +21,13 @@ local makeList
 --==============================================================================
 -- Public API
 --
+
+Utils.addSimpleRows = function(list, numRows)
+        for i = 1, numRows do
+                list:insertRow{ height = 72 }
+        end
+end
+
 Utils.addRowText = function(row, text)
 	local rowTitle = display.newText( row, text, 0, 0, native.systemFontBold, 16 )
 	rowTitle.x = row.x - ( row.contentWidth * 0.5 ) + ( rowTitle.contentWidth * 0.5 ) + LEFT_PADDING

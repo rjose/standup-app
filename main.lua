@@ -1,107 +1,43 @@
 local Utils = require('utils')
-
-display.setStatusBar( display.HiddenStatusBar )
-
-
---==============================================================================
--- Mock Data
---
-local tracks = {
-        "Contacts",
-        "Conversation",
-        "Felix",
-        "Future"
-}
-
-local trackStaff = {}
-trackStaff["Contacts"] = {
-        "Person 1",
-        "Person 2"
-}
+local TracksView = require('tracks_view')
+local StaffView = require('staff_view')
 
 --==============================================================================
--- Global Data
+-- Module Data
 --
+local m_data = {}
+
 local global = {}
-global.tracksView = nil
-global.staffView = nil
+global.views = {}
 
-global.currentTrack = ""
-
--- Handlers
-local onTrackRowRender
-local onTrackRowTouch
-local onStaffRowRender
-local onStaffRowTouch
-
-
-local function getTrackView(tracks)
-        print(tracks, tracks[1])
-        local result = Utils.makeListView("Mobile Tracks", onTrackRowRender, onTrackRowTouch);
-        local list = result[1]
-
-        -- Add tracks
-        for i = 1, #tracks do
-                list:insertRow{ height = 72 }
-        end
-
-        return result
+local function getData()
+        return m_data
 end
 
-local function getStaffView(track)
-        local result = Utils.makeListView(track .. " Staff", onStaffRowRender, onStaffRowTouch);
-        local list = result[1]
+local function transitionToCurrentView()
+        if #global.views < 1 then return end
 
-        if trackStaff[track] then
-                for i = 1, #trackStaff[track] do
-                        list:insertRow{ height = 72 }
-                end
-        end
-        return result
+        -- TODO: Do something fancier here
+        global.views[#global.views].alpha = 1
 end
 
 
---==============================================================================
--- Handlers
---
-
--- Hande row touch events
-onTrackRowTouch = function( event )
+local onTrackRowTouch = function( event )
 	local phase = event.phase
 	local row = event.target
-        local track = tracks[row.index]
-        global.currentTrack = track
+        local track = m_data.tracks[row.index]
 	
 	if "press" == phase then
 		print( "Pressed row: " .. row.index )
 
 	elseif "release" == phase then
-                global.staffView = getStaffView(track)
-
-		--Transition out the list, transition in the item selected text and the back button
-		transition.to( global.tracksView, { x = - global.tracksView.contentWidth,
-                               time = 400, transition = easing.outExpo } )
-		transition.to( global.staffView, { x = 0, time = 400, transition = easing.outExpo } )
+                print("Handle touch")
+                global.views[#global.views+1] = StaffView.getStaffView(track, onStaffRowTouch)
+                transitionToCurrentView()
         end
 end
 
--- Handle row rendering
-onTrackRowRender = function( event )
-	local row = event.row
-
-        local trackName = tracks[row.index]
-        Utils.addRowText(row, trackName)
-end
-
-
-onStaffRowRender = function(event)
-	local row = event.row
-
-        local personName = trackStaff[global.currentTrack][row.index]
-        Utils.addRowText(row, personName)
-end
-
-onStaffRowTouch = function(event)
+local onStaffRowTouch = function(event)
         print("onStaffRowTouch")
 end
 
@@ -131,9 +67,37 @@ end
 --backButton.y = display.contentHeight - backButton.contentHeight
 --global.tracksView:insert( backButton )
 
+
+local function update()
+        -- TODO: Make network call to get data (handle failure)
+        m_data.tracks = {
+                "Contacts",
+                "Conversation",
+                "Felix",
+                "Future"
+        }
+
+        m_data.trackStaff = {}
+        m_data.trackStaff["Contacts"] = {
+                "Person 1",
+                "Person 2"
+        }
+
+        if #global.views == 0 then
+                global.views[#global.views+1] = TracksView.getTracksView(onTrackRowTouch)
+                transitionToCurrentView()
+        else
+                -- TODO: Refresh current view
+        end
+end
+
+
 local function init()
+        display.setStatusBar( display.HiddenStatusBar )
         display.setDefault( "background", 255, 255, 255 )
-        global.tracksView = getTrackView(tracks)
+        TracksView.setDataGetter(getData)
+        StaffView.setDataGetter(getData)
+        update()
 end
 
 init()
