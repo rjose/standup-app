@@ -34,7 +34,7 @@ JSON, but if there's code to parse it, then we might as well.
 Implementation
 ~~~~~~~~~~~~~~
 . Sketch out screens for app [X]
-. Build app under simulator [X][X][X][X][X][X][X]<><><><>
+. Build app under simulator [X][X][X][X][X][X][X]<X><X><><>
 . Mock up data on the server side [][][][]
 . Push mocked data backwards [][][][][]
 . Pull JIRA data [][][][][][]
@@ -85,6 +85,11 @@ time.
 
 Alright, let's add a back button. It's not pretty, but it's done. Let's check
 in. Let's clean things up a little and then think about adding the person view.
+
+OK, adding the person view will be the last part of this. I want a list of tasks
+showing: JIRA id, name, effort left, and controls for updating effort left. The
+row heights should be taller than the other rows. Let's add some data and then
+the page.
 
 TODO: Figure out if objects are cleaned up when they go away
 TODO: Add a person view

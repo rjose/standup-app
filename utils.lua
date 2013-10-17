@@ -28,6 +28,7 @@ Utils.addSimpleRows = function(list, numRows)
         end
 end
 
+-- TODO: Figure out how this gets destroyed
 Utils.addRowText = function(row, text)
 	local rowTitle = display.newText( row, text, 0, 0, native.systemFontBold, 16 )
 	rowTitle.x = row.x - ( row.contentWidth * 0.5 ) + ( rowTitle.contentWidth * 0.5 ) + LEFT_PADDING
@@ -62,6 +63,16 @@ Utils.makeButton = function(text, onRelease)
                 labelYOffset = - 1,
                 onRelease = onRelease
         }
+        return result
+end
+
+-- This one's a little specific. Document as such.
+Utils.makeBackHandler = function(view, onBackButtonRelease)
+        local result = function(event)
+                view.backButton.alpha = 0
+                view.backButton = nil
+                onBackButtonRelease(event)
+        end
         return result
 end
 

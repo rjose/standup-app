@@ -1,6 +1,7 @@
 local Utils = require('utils')
 local TracksView = require('tracks_view')
 local StaffView = require('staff_view')
+local PersonView = require('person_view')
 
 --==============================================================================
 -- Module Data
@@ -8,6 +9,8 @@ local StaffView = require('staff_view')
 local global = {}
 global.views = {}
 global.data = {}
+
+local onStaffRowTouch
 
 -------------------------------------------------------------------------------- 
 -- Returns app data
@@ -57,8 +60,22 @@ end
 -------------------------------------------------------------------------------- 
 -- Displays person view on staff touch.
 --
-local onStaffRowTouch = function(event)
-        print("onStaffRowTouch")
+onStaffRowTouch = function(event)
+	local phase = event.phase
+	local row = event.target
+
+	if "press" == phase then
+		print( "Pressed row: " .. row.index )
+
+	elseif "release" == phase then
+                local track = global.views[#global.views].data.track
+                local trackStaff = global.data.trackStaff[track]
+                local person = trackStaff[row.index]
+
+                -- TODO: Add function for updating effort left
+                global.views[#global.views+1] = PersonView.getPersonView(person, popView)
+                transitionToCurrentView()
+        end
 end
 
 
@@ -81,6 +98,11 @@ local function update()
                 "Person 1",
                 "Person 2"
         }
+        global.data.assignments = {}
+        global.data.assignments["Person 1"] = {
+                {["id"] = "MOB-123", ["name"] = "Implement awesomeness", ["effort_left"] = 2},
+                {["id"] = "MOB-456", ["name"] = "Add something new", ["effort_left"] = 0.5}
+        }
 
         if #global.views == 0 then
                 global.views[#global.views+1] = TracksView.getTracksView(onTrackRowTouch)
@@ -100,6 +122,7 @@ local function init()
         display.setDefault( "background", 255, 255, 255 )
         TracksView.setDataGetter(getData)
         StaffView.setDataGetter(getData)
+        PersonView.setDataGetter(getData)
         update()
 end
 
