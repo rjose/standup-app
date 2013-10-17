@@ -1,3 +1,4 @@
+local widget = require('widget')
 local Utils = require('utils')
 
 local StaffView = {}
@@ -11,13 +12,37 @@ local dataGetter = function() return {} end
 local global = {}
 global.currentTrack = nil
 
+-- TODO: Move this to utils
+function makeButton(text, onRelease)
+        local result = widget.newButton
+        {
+                width = 60,
+                height = 25,
+                label = text,
+                labelYOffset = - 1,
+                onRelease = onRelease
+        }
+        return result
+end
+
+function makeBackHandler(view, onBackButtonRelease)
+        local result = function(event)
+                view.backButton.alpha = 0
+                view.backButton = nil
+                onBackButtonRelease(event)
+        end
+        return result
+end
+
 --==============================================================================
 -- Public API
 --
-StaffView.getStaffView = function(track, onStaffRowTouch)
+StaffView.getStaffView = function(track, onStaffRowTouch, onBackButtonRelease)
         global.currentTrack = track
         local data = dataGetter()
         local result = Utils.makeListView(track .. " Staff", onStaffRowRender, onStaffRowTouch);
+        result.backButton = makeButton("Back", makeBackHandler(result, onBackButtonRelease))
+
         result.alpha = 0
         local list = result[1]
 

@@ -28,6 +28,13 @@ local function transitionToCurrentView()
         global.views[#global.views].alpha = 1
 end
 
+local function popView()
+        local view = table.remove(global.views)
+        view.alpha = 0
+
+        -- TODO: Do some kind of transition
+end
+
 
 -------------------------------------------------------------------------------- 
 -- Displays track staff view on track touch.
@@ -41,7 +48,7 @@ local onTrackRowTouch = function( event )
 		print( "Pressed row: " .. row.index )
 
 	elseif "release" == phase then
-                global.views[#global.views+1] = StaffView.getStaffView(track, onStaffRowTouch)
+                global.views[#global.views+1] = StaffView.getStaffView(track, onStaffRowTouch, popView)
                 transitionToCurrentView()
         end
 end

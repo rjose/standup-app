@@ -83,13 +83,12 @@ functions be in main? Let's just pull the touch handlers over first since these
 will change the main view. Done. Let's check in and then clean up main one more
 time.
 
+Alright, let's add a back button. It's not pretty, but it's done. Let's check
+in.
+
 TODO: Add a back button to the title bar
-TODO: Clean up more code
 TODO: Figure out if objects are cleaned up when they go away
-TODO: Separate construction of view from its render
-TODO: Handle the global data in tracks_view.lua
-TODO: Let's make the views into a stack. The transition animation should be
-      separate
+TODO: Add a person view
 
 Risk Items
 ~~~~~~~~~~
