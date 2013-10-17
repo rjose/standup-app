@@ -101,11 +101,15 @@ local function update()
         global.data.assignments = {}
         global.data.assignments["Person 1"] = {
                 {["id"] = "MOB-123", ["name"] = "Implement awesomeness", ["effort_left"] = 2},
-                {["id"] = "MOB-456", ["name"] = "Add something new", ["effort_left"] = 0.5}
+                {["id"] = "MOB-456", ["name"] = "Add something new", ["effort_left"] = 0.5},
+                {["id"] = "MOB-000", ["name"] = "12345678901234567890123456789012", ["effort_left"] = 0.5}
         }
 
         if #global.views == 0 then
-                global.views[#global.views+1] = TracksView.getTracksView(onTrackRowTouch)
+                -- TODO: Remove this
+                global.views[#global.views+1] = PersonView.getPersonView("Person 1", popView)
+
+                --global.views[#global.views+1] = TracksView.getTracksView(onTrackRowTouch)
                 transitionToCurrentView()
         else
                 -- TODO: Refresh current view
@@ -123,6 +127,7 @@ local function init()
         TracksView.setDataGetter(getData)
         StaffView.setDataGetter(getData)
         PersonView.setDataGetter(getData)
+
         update()
 end
 

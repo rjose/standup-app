@@ -34,7 +34,7 @@ JSON, but if there's code to parse it, then we might as well.
 Implementation
 ~~~~~~~~~~~~~~
 . Sketch out screens for app [X]
-. Build app under simulator [X][X][X][X][X][X][X]<X><X><><>
+. Build app under simulator [X][X][X][X][X][X][X]<X><X><X><><><>
 . Mock up data on the server side [][][][]
 . Push mocked data backwards [][][][][]
 . Pull JIRA data [][][][][][]
@@ -91,8 +91,18 @@ showing: JIRA id, name, effort left, and controls for updating effort left. The
 row heights should be taller than the other rows. Let's add some data and then
 the page.
 
-TODO: Figure out if objects are cleaned up when they go away
-TODO: Add a person view
+Alright, let's try rendering task views. The first thing I'll do is sketch out
+what I want. After that, I'll rig the software up to show the task view first.
+The next step is to style the list a little bit differently. Done!
+
+Now, I'm adding the up and down controls. Let's see if we can update the task
+data when these change. Getting there. How do I do MVC with corona? I updated it
+directly (not quite MVC, but fine for now). I need a function for formatting the
+effort left.
+
+Tomorrow, we'll start mocking up the data from the server. We should probably
+clean up the files first.
+
 
 Risk Items
 ~~~~~~~~~~
@@ -103,3 +113,7 @@ Nice to haves
 It would be nice to have a way to display to people what the PM is doing. Maybe
 the track list is shown and then as things are selected and updated, the view
 changes. This will be for later.
+
+TODO: Figure out if objects are cleaned up when they go away
+TODO: Updates to JIRA should cause a JIRA pull
+TODO: Refine logic for increasing/decreasing effort left
