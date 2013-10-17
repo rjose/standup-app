@@ -53,6 +53,18 @@ Utils.makeListView = function(title, onRowRender, onRowTouch)
         return result
 end
 
+Utils.makeButton = function(text, onRelease)
+        local result = widget.newButton
+        {
+                width = 60,
+                height = 25,
+                label = text,
+                labelYOffset = - 1,
+                onRelease = onRelease
+        }
+        return result
+end
+
 --==============================================================================
 -- Internal functions
 --

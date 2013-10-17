@@ -84,9 +84,8 @@ will change the main view. Done. Let's check in and then clean up main one more
 time.
 
 Alright, let's add a back button. It's not pretty, but it's done. Let's check
-in.
+in. Let's clean things up a little and then think about adding the person view.
 
-TODO: Add a back button to the title bar
 TODO: Figure out if objects are cleaned up when they go away
 TODO: Add a person view
 
