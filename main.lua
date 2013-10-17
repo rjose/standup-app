@@ -5,15 +5,22 @@ local StaffView = require('staff_view')
 --==============================================================================
 -- Module Data
 --
-local m_data = {}
-
 local global = {}
 global.views = {}
+global.data = {}
 
+-------------------------------------------------------------------------------- 
+-- Returns app data
+--
+--      NOTE: This is passed to other modules as a data getter.
+--
 local function getData()
-        return m_data
+        return global.data
 end
 
+-------------------------------------------------------------------------------- 
+-- Transitions to top view on view stack.
+--
 local function transitionToCurrentView()
         if #global.views < 1 then return end
 
@@ -22,21 +29,27 @@ local function transitionToCurrentView()
 end
 
 
+-------------------------------------------------------------------------------- 
+-- Displays track staff view on track touch.
+--
 local onTrackRowTouch = function( event )
 	local phase = event.phase
 	local row = event.target
-        local track = m_data.tracks[row.index]
+        local track = global.data.tracks[row.index]
 	
 	if "press" == phase then
 		print( "Pressed row: " .. row.index )
 
 	elseif "release" == phase then
-                print("Handle touch")
                 global.views[#global.views+1] = StaffView.getStaffView(track, onStaffRowTouch)
                 transitionToCurrentView()
         end
 end
 
+
+-------------------------------------------------------------------------------- 
+-- Displays person view on staff touch.
+--
 local onStaffRowTouch = function(event)
         print("onStaffRowTouch")
 end
@@ -68,17 +81,22 @@ end
 --global.tracksView:insert( backButton )
 
 
+--------------------------------------------------------------------------------
+-- Pulls data and updates current view.
+--
+--      If there isn't a current view, the TracksView is added and then shown.
+--
 local function update()
         -- TODO: Make network call to get data (handle failure)
-        m_data.tracks = {
+        global.data.tracks = {
                 "Contacts",
                 "Conversation",
                 "Felix",
                 "Future"
         }
 
-        m_data.trackStaff = {}
-        m_data.trackStaff["Contacts"] = {
+        global.data.trackStaff = {}
+        global.data.trackStaff["Contacts"] = {
                 "Person 1",
                 "Person 2"
         }
@@ -92,6 +110,10 @@ local function update()
 end
 
 
+
+--------------------------------------------------------------------------------
+-- Initializes app.
+--
 local function init()
         display.setStatusBar( display.HiddenStatusBar )
         display.setDefault( "background", 255, 255, 255 )
