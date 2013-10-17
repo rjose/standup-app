@@ -35,6 +35,25 @@ global.staffView = nil
 
 global.currentTrack = ""
 
+-- Handlers
+local onTrackRowRender
+local onTrackRowTouch
+local onStaffRowRender
+local onStaffRowTouch
+
+--==============================================================================
+-- Utils
+--
+local function addRowText(row, text)
+	local rowTitle = display.newText( row, text, 0, 0, native.systemFontBold, 16 )
+	rowTitle.x = row.x - ( row.contentWidth * 0.5 ) + ( rowTitle.contentWidth * 0.5 ) + LEFT_PADDING
+	rowTitle.y = row.contentHeight * 0.5
+	rowTitle:setTextColor( 0, 0, 0 )
+
+	local rowArrow = display.newImage( row, "rowArrow.png", false )
+	rowArrow.x = row.x + ( row.contentWidth * 0.5 ) - rowArrow.contentWidth
+	rowArrow.y = row.contentHeight * 0.5
+end
 
 local function makeTitleBar()
         -- Create toolbar to go at the top of the screen
@@ -67,45 +86,51 @@ end
 
 
 
--- Handle row rendering
-local function onTrackRowRender( event )
-	local row = event.row
 
-        local trackName = tracks[row.index]
-	
-	local rowTitle = display.newText( row, trackName, 0, 0, native.systemFontBold, 16 )
-	rowTitle.x = row.x - ( row.contentWidth * 0.5 ) + ( rowTitle.contentWidth * 0.5 ) + LEFT_PADDING
-	rowTitle.y = row.contentHeight * 0.5
-	rowTitle:setTextColor( 0, 0, 0 )
-	
-	local rowArrow = display.newImage( row, "rowArrow.png", false )
-	rowArrow.x = row.x + ( row.contentWidth * 0.5 ) - rowArrow.contentWidth
-	rowArrow.y = row.contentHeight * 0.5
+
+
+local function makeList(onRowRender, onRowTouch)
+        result = widget.newTableView
+        {
+                top = 38,
+                width = 320,
+                height = 448,
+                maskFile = "mask-320x448.png",
+                onRowRender = onRowRender,
+                onRowTouch = onRowTouch,
+        }
+        return result
 end
 
+local function makeListView(title, onRowRender, onRowTouch)
+        local result = display.newGroup()
+        local list = makeList(onRowRender, onRowTouch)
+        local titleBar = makeTitleBar()
+        local titleText = makeTitle(titleBar, title)
+        local shadow = makeTitleShadow(titleBar)
 
-local function onStaffRowRender(event)
-	local row = event.row
-
-        local personName = trackStaff[global.currentTrack][row.index]
-
-        -- TODO: Extract and make generic
-	local rowTitle = display.newText( row, personName, 0, 0, native.systemFontBold, 16 )
-	rowTitle.x = row.x - ( row.contentWidth * 0.5 ) + ( rowTitle.contentWidth * 0.5 ) + LEFT_PADDING
-	rowTitle.y = row.contentHeight * 0.5
-	rowTitle:setTextColor( 0, 0, 0 )
-
-	local rowArrow = display.newImage( row, "rowArrow.png", false )
-	rowArrow.x = row.x + ( row.contentWidth * 0.5 ) - rowArrow.contentWidth
-	rowArrow.y = row.contentHeight * 0.5
+        result:insert( list )
+        result:insert( titleBar )
+        result:insert( titleText )
+        result:insert( shadow )
+        return result
 end
 
-local function onStaffRowTouch(event)
-        print("onStaffRowTouch")
+local function getTrackView(tracks)
+        print(tracks, tracks[1])
+        local result = makeListView("Mobile Tracks", onTrackRowRender, onTrackRowTouch);
+        local list = result[1]
+
+        -- Add tracks
+        for i = 1, #tracks do
+                list:insertRow{ height = 72 }
+        end
+
+        return result
 end
 
 local function getStaffView(track)
-        local result = makeListView("Mobile Tracks", onTrackRowRender, onTrackRowTouch);
+        local result = makeListView(track .. " Staff", onStaffRowRender, onStaffRowTouch);
         local list = result[1]
 
         if trackStaff[track] then
@@ -116,8 +141,13 @@ local function getStaffView(track)
         return result
 end
 
+
+--==============================================================================
+-- Handlers
+--
+
 -- Hande row touch events
-local function onTrackRowTouch( event )
+onTrackRowTouch = function( event )
 	local phase = event.phase
 	local row = event.target
         local track = tracks[row.index]
@@ -133,50 +163,28 @@ local function onTrackRowTouch( event )
 		transition.to( global.tracksView, { x = - global.tracksView.contentWidth,
                                time = 400, transition = easing.outExpo } )
 		transition.to( global.staffView, { x = 0, time = 400, transition = easing.outExpo } )
-	end
-end
-
-function makeList(onRowRender, onRowTouch)
-        result = widget.newTableView
-        {
-                top = 38,
-                width = 320,
-                height = 448,
-                maskFile = "mask-320x448.png",
-                onRowRender = onRowRender,
-                onRowTouch = onRowTouch,
-        }
-        return result
-end
-
-function makeListView(title, onRowRender, onRowTouch)
-        local result = display.newGroup()
-        local list = makeList(onRowRender, onRowTouch)
-        local titleBar = makeTitleBar()
-        local titleText = makeTitle(titleBar, title)
-        local shadow = makeTitleShadow(titleBar)
-
-        result:insert( list )
-        result:insert( titleBar )
-        result:insert( titleText )
-        result:insert( shadow )
-        return result
-end
-
-function getTrackView(tracks)
-        local result = makeListView("Mobile Tracks", onTrackRowRender, onTrackRowTouch);
-        local list = result[1]
-
-        -- Add tracks
-        for i = 1, #tracks do
-                list:insertRow{ height = 72 }
         end
+end
 
-        return result
+-- Handle row rendering
+onTrackRowRender = function( event )
+	local row = event.row
+
+        local trackName = tracks[row.index]
+        addRowText(row, trackName)
 end
 
 
+onStaffRowRender = function(event)
+	local row = event.row
 
+        local personName = trackStaff[global.currentTrack][row.index]
+        addRowText(row, personName)
+end
+
+onStaffRowTouch = function(event)
+        print("onStaffRowTouch")
+end
 
 ----Handle the back button release event
 --local function onBackRelease()

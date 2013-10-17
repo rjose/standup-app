@@ -70,6 +70,9 @@ Let's check in and then reorganize this code.
 Let's start by moving exposed code to functions. Done. I got the tracks to
 render again. Let's check in and then render a staff view. Done!
 
+OK, let's do a little more code cleanup before we start. Done. Let's check in
+and then move the tracks code and staff code to their own files.
+
 TODO: Add a back button to the title bar
 TODO: Clean up more code
 
