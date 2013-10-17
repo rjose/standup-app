@@ -61,32 +61,6 @@ local onStaffRowTouch = function(event)
         print("onStaffRowTouch")
 end
 
-----Handle the back button release event
---local function onBackRelease()
---	--Transition in the list, transition out the item selected text and the back button
---	transition.to( list, { x = 0, time = 400, transition = easing.outExpo } )
---	transition.to( staffView, { x = display.contentWidth + staffView.contentWidth * 0.5, time = 400, transition = easing.outExpo } )
---	transition.to( backButton, { alpha = 0, time = 400, transition = easing.outQuad } )
---
---        -- Remove staff view
---        --tracksView:remove(staffView)
---        staffView = nil
---end
---
-----Create the back button
---backButton = widget.newButton
---{
---	width = 298,
---	height = 56,
---	label = "Back", 
---	labelYOffset = - 1,
---	onRelease = onBackRelease
---}
---backButton.alpha = 0
---backButton.x = display.contentCenterX
---backButton.y = display.contentHeight - backButton.contentHeight
---global.tracksView:insert( backButton )
-
 
 --------------------------------------------------------------------------------
 -- Pulls data and updates current view.
