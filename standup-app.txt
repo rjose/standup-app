@@ -34,7 +34,7 @@ JSON, but if there's code to parse it, then we might as well.
 Implementation
 ~~~~~~~~~~~~~~
 . Sketch out screens for app [X]
-. Build app under simulator [X][X][X][X][][][]
+. Build app under simulator [X][X][X][X][X][][]
 . Mock up data on the server side [][][][]
 . Push mocked data backwards [][][][][]
 . Pull JIRA data [][][][][][]
